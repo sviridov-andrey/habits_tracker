@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from habit.models import Habit
+from habit.paginators import HabitPaginator
 from habit.permissions import IsOwner
 from habit.serializers import HabitSerializer
 
@@ -25,7 +26,7 @@ class HabitListAPIView(generics.ListAPIView):
 
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
-   # pagination_class = HabitPaginator
+    pagination_class = HabitPaginator
     permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self):
@@ -38,7 +39,7 @@ class HabitPublicListAPIView(generics.ListAPIView):
     """ Вывод списка публичных привычек """
 
     serializer_class = HabitSerializer
-   # pagination_class = HabitPaginator
+    pagination_class = HabitPaginator
     permission_classes = [AllowAny]
 
     def get_queryset(self):
