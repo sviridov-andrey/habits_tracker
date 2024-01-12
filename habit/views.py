@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from habit.models import Habit
+from habit.permissions import IsOwner
 from habit.serializers import HabitSerializer
 
 
@@ -25,8 +26,7 @@ class HabitListAPIView(generics.ListAPIView):
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
    # pagination_class = HabitPaginator
-    permission_classes = [IsAuthenticated, # IsOwner
-                          ]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self):
 
@@ -52,8 +52,7 @@ class HabitRetrieveAPIView(generics.RetrieveAPIView):
 
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
-    permission_classes = [IsAuthenticated, #IsOwner
-                          ]
+    permission_classes = [IsAuthenticated, IsOwner]
 
 
 class HabitUpdateAPIView(generics.UpdateAPIView):
@@ -61,7 +60,7 @@ class HabitUpdateAPIView(generics.UpdateAPIView):
 
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
-  #  permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     def perform_update(self, serializer):
 
@@ -74,7 +73,7 @@ class HabitDestroyAPIView(generics.DestroyAPIView):
     """ Удаление привычки """
 
     queryset = Habit.objects.all()
-  #  permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     def perform_destroy(self, instance):
 
