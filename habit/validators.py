@@ -2,7 +2,7 @@ from datetime import timedelta
 from rest_framework.serializers import ValidationError
 
 
-def validator_for_habit(value):
+def validator_habit(value):
     """ Проверка заполнения полей привычки """
 
     time = timedelta(minutes=2)
