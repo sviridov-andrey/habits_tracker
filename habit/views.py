@@ -15,10 +15,10 @@ class HabitCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
 
-        new_habit = serializer.save()
-        new_habit.user = self.request.user
+        habit = serializer.save()
+        habit.user = self.request.user
      #   create_reminder(new_habit)
-        new_habit.save()
+        habit.save()
 
 
 class HabitListAPIView(generics.ListAPIView):
