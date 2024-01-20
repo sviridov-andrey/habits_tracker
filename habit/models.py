@@ -8,8 +8,13 @@ class Habit(models.Model):
     """ Модель привычки """
 
     PERIODICTY_CHOICES = (
-        ('daily', 'ежедневно'),
-        ('weekly', 'еженедельно'),
+        ('1', 'ежедневно'),
+        ('2', 'раз в два дня'),
+        ('3', 'раз в три дня'),
+        ('4', 'раз в четыре дня'),
+        ('5', 'раз в пять дней'),
+        ('6', 'раз в шесть дней'),
+        ('7', 'раз в семь дней'),
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='владелец')
