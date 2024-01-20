@@ -5,6 +5,7 @@ from habit.models import Habit
 from habit.paginators import HabitPaginator
 from habit.permissions import IsOwner
 from habit.serializers import HabitSerializer
+from habit.tasks import create_reminder, update_reminder, delete_reminder
 
 
 class HabitCreateAPIView(generics.CreateAPIView):
@@ -17,7 +18,7 @@ class HabitCreateAPIView(generics.CreateAPIView):
 
         habit = serializer.save()
         habit.user = self.request.user
-     #   create_reminder(new_habit)
+        create_reminder.delay(habit)
         habit.save()
 
 
@@ -66,7 +67,7 @@ class HabitUpdateAPIView(generics.UpdateAPIView):
     def perform_update(self, serializer):
 
         habit = serializer.save()
-     #   update_reminder(habit)
+        update_reminder.delay(habit)
         habit.save()
 
 
@@ -78,5 +79,5 @@ class HabitDestroyAPIView(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
 
-   #     delete_reminder(instance)
+        delete_reminder.delay(instance)
         instance.delete()
