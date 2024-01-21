@@ -18,7 +18,7 @@ def create_reminder(habit):
     PeriodicTask.objects.create(
         crontab=crontab_schedule,
         name=f'Habit Task - {habit.name}',
-        task='habits.tasks.send_message_to_bot',
+        task='habit.servises.send_message_to_bot',
         args=[habit.id],
     )
 
