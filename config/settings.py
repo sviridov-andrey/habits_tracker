@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'habit',
     'django_celery_beat',
     'corsheaders',
+    'drf_yasg',
 
 ]
 
