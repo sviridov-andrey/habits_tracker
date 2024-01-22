@@ -1,18 +1,36 @@
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from config import settings
-from habit.models import Habit
-import requests
 
 
-def send_message_to_bot(habit_id):
-    """ отправляет сообщение в телеграм-бот"""
+def create_reminder(habit):
+    """ Создает напоминание о привычке """
 
-    habit = Habit.objects.get(id=habit_id)
-  #  habit.
-    requests.get(
-        url=f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_API_KEY}/sendMessage',
-        params={
-            'chat_id': habit.user.telegram_id,
-            'text': f'Привет {habit.user}! Время {habit.time}. Пора идти в {habit.place} и сделать {habit.action}.'                    
-                    f'Это займет {habit.duration} минут!'
-        }
+    crontab_schedule, _ = CrontabSchedule.objects.get_or_create(
+        minute=habit.time.minute,
+        hour=habit.time.hour,
+        day_of_month=f'*/{habit.period}',
+        day_of_week='*',
+        month_of_year='*',
+        timezone=settings.TIME_ZONE
     )
+
+    PeriodicTask.objects.create(
+        crontab=crontab_schedule,
+        name=f'Habit Task - {habit.name}',
+        task='habit.tasks.send_message_to_bot',
+        args=[habit.id],
+    )
+
+
+def delete_reminder(habit):
+    """ Удаляет напоминание о привычке """
+
+    task_name = f'send_message_to_bot_{habit.id}'
+    PeriodicTask.objects.filter(name=task_name).delete()
+
+
+def update_reminder(habit):
+    """ Обновляет напоминание о привычке """
+
+    delete_reminder(habit)
+    create_reminder(habit)
