@@ -9,7 +9,8 @@ class HabitTestCase(APITestCase):
 
     def setUp(self) -> None:
         self.client = APIClient()
-        self.user = User.objects.create(email='test@example.com', password='test')
+        self.user = User.objects.create(email='test@example.com')
+        self.user.set_password('12345')
         self.client.force_authenticate(user=self.user)
 
         self.habit = Habit.objects.create(
@@ -18,35 +19,40 @@ class HabitTestCase(APITestCase):
             time='12:00:00',
             action='Test',
             is_good=False,
-            period=1,
+            period='ежедневно',
             duration='00:00:30',
             is_public=True,
         )
+        print(self.habit)
 
-    # def test_create_habit(self):
-    #     """Тестирование создания привычки"""
-    #     data = {
-    #         "place": "Test",
-    #         "time": "12:00:00",
-    #         "action": "Test",
-    #         "is_good": False,
-    #         "period": 1,
-    #         "duration": "00:00:30",
-    #     }
-    #
-    #     response = self.client.post(
-    #         path='/habit/create/',
-    #         data=data
-    #     )
-    #
-    #     self.assertEqual(
-    #         response.status_code,
-    #         status.HTTP_201_CREATED
-    #     )
-    #
-    #     self.assertTrue(
-    #         Habit.objects.all().exists()
-    #     )
+    def test_create_habit(self):
+        """Тестирование создания привычки"""
+        data = {
+            "user": self.user,
+            "place": "Test",
+            "time": "12:00:00",
+            "action": "Test",
+            "is_good": False,
+            "period": 'ежедневно',
+            "duration": "00:00:30",
+        }
+        print(data)
+
+        response = self.client.post(
+            path='/habit/habit_create/',
+            data=data
+        )
+        print(response)
+        print(response.status_code)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED
+        )
+
+        self.assertTrue(
+            Habit.objects.all().exists()
+        )
     #
     # def test_list_habit(self):
     #     """Тестирование вывода списка привычек"""
