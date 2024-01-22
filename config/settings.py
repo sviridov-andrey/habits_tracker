@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'users',
     'habit',
     'django_celery_beat',
+    'corsheaders',
 
 ]
 
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -175,3 +177,6 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 TELEGRAM_BOT_API_KEY = os.getenv('TELEGRAM_BOT_API_KEY')
+
+CORS_ALLOWED_ORIGINS = ['http://localhost:8000']
+CORS_ALLOW_ALL_ORIGINS = False
