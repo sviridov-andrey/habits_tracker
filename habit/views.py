@@ -5,7 +5,7 @@ from habit.models import Habit
 from habit.paginators import HabitPaginator
 from habit.permissions import IsOwner
 from habit.serializers import HabitSerializer
-from habit.tasks import create_reminder, update_reminder, delete_reminder
+from habit.servises import create_reminder, update_reminder, delete_reminder
 
 
 class HabitCreateAPIView(generics.CreateAPIView):
