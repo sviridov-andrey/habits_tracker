@@ -13,15 +13,21 @@ class InitialTestCase(APITestCase):
         self.user = User.objects.create(email='test@example.com', password='123')
         self.client.force_authenticate(user=self.user)
 
+        response = self.client.post('/users/token/', {"email": "test@example.com", "password": "123"})
+        self.access_token = response.json().get("access")
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        print(self.access_token)
+        print(self.user.pk)
+
         self.habit = Habit.objects.create(
             user=self.user,
             name='Тестовая привычка',
             place='Тестовое место',
-            time='12:00:00',
+          #  time='12:00',
             action='Тестовое действие',
             is_good=False,
-            period='ежедневно',
-            duration='00:00:30',
+            period='1',
+          #  duration='00:01',
             is_public=True,
         )
 
@@ -32,24 +38,18 @@ class HabitTestCase(InitialTestCase):
         """Тест создания привычки"""
 
         data = {
-            "user": self.user,
-            "name": "Тестовая привычка",
-            "place": "Тестовое место",
-            "time": "12:00:00",
-            "action": "Тестовое действие",
-            "is_good": False,
-            "period": 'ежедневно',
-            "duration": "00:00:30",
-            "is_public": True,
+            "user": 1,   #   !!!!! ПЕРВИЧНЫЙ КЛЮЧ !!!!!!
+            "name": "Тестовая привычка_2",
+            "place": "Тестовое место_2",
+            "time": "13:00:00",
+            "action": "Тестовое действие_2",
+          #  "is_good": False,
+          #  "period": 'ежедневно',
+          #  "duration": "00:02",
+          #  "is_public": True,
         }
 
-        print(f'self.user: {self.user}')
-        print(f'self.habit: {self.habit}')
-        print(f'data: {data}')
-
         response = self.client.post(reverse('habit:habit_create'), data=data)
-        print(f'response: {response}')
-        print(f'response.status_code: {response.status_code}')
 
         self.assertEqual(
             response.status_code,
