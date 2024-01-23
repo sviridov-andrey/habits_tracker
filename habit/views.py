@@ -67,7 +67,7 @@ class HabitUpdateAPIView(generics.UpdateAPIView):
     def perform_update(self, serializer):
 
         habit = serializer.save()
-        update_reminder.delay(habit)
+        update_reminder(habit)
         habit.save()
 
 
