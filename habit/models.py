@@ -24,7 +24,7 @@ class Habit(models.Model):
     action = models.CharField(max_length=100, verbose_name='действие привычки')
     is_good = models.BooleanField(default=True, verbose_name='признак приятной привычки')
     connected_habit = models.ForeignKey('self', on_delete=models.CASCADE, **NULLABLE, verbose_name='связанная привычка')
-    period = models.CharField(max_length=20, choices=PERIODICTY_CHOICES, default='daily',
+    period = models.CharField(max_length=20, choices=PERIODICTY_CHOICES, default='1',
                               verbose_name='периодичность привычки')
     duration = models.DurationField(default=timedelta(minutes=2),
                                     verbose_name='продолжительность выполнения привычки')
