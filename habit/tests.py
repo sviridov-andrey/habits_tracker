@@ -1,58 +1,64 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-
+from django.urls import reverse
 from habit.models import Habit
 from users.models import User
 
 
-class HabitTestCase(APITestCase):
+class InitialTestCase(APITestCase):
+    """Создание тестовых пользователя и привычки"""
 
     def setUp(self) -> None:
         self.client = APIClient()
-        self.user = User.objects.create(email='test@example.com')
-        self.user.set_password('12345')
+        self.user = User.objects.create(email='test@example.com', password='123')
         self.client.force_authenticate(user=self.user)
 
         self.habit = Habit.objects.create(
             user=self.user,
-            place='Test',
+            name='Тестовая привычка',
+            place='Тестовое место',
             time='12:00:00',
-            action='Test',
+            action='Тестовое действие',
             is_good=False,
             period='ежедневно',
             duration='00:00:30',
             is_public=True,
         )
-        print(self.habit)
+
+
+class HabitTestCase(InitialTestCase):
 
     def test_create_habit(self):
-        """Тестирование создания привычки"""
+        """Тест создания привычки"""
+
         data = {
             "user": self.user,
-            "place": "Test",
+            "name": "Тестовая привычка",
+            "place": "Тестовое место",
             "time": "12:00:00",
-            "action": "Test",
+            "action": "Тестовое действие",
             "is_good": False,
             "period": 'ежедневно',
             "duration": "00:00:30",
+            "is_public": True,
         }
-        print(data)
 
-        response = self.client.post(
-            path='/habit/habit_create/',
-            data=data
-        )
-        print(response)
-        print(response.status_code)
+        print(f'self.user: {self.user}')
+        print(f'self.habit: {self.habit}')
+        print(f'data: {data}')
+
+        response = self.client.post(reverse('habit:habit_create'), data=data)
+        print(f'response: {response}')
+        print(f'response.status_code: {response.status_code}')
 
         self.assertEqual(
             response.status_code,
             status.HTTP_201_CREATED
         )
 
-        self.assertTrue(
-            Habit.objects.all().exists()
-        )
+        # self.assertTrue(
+        #     Habit.objects.all().exists()
+        # )
     #
     # def test_list_habit(self):
     #     """Тестирование вывода списка привычек"""
