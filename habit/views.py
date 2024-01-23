@@ -18,7 +18,7 @@ class HabitCreateAPIView(generics.CreateAPIView):
 
         habit = serializer.save()
         habit.user = self.request.user
-        create_reminder.delay(habit)
+        create_reminder(habit)
         habit.save()
 
 
@@ -79,5 +79,5 @@ class HabitDestroyAPIView(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
 
-        delete_reminder.delay(instance)
+        delete_reminder(instance)
         instance.delete()
