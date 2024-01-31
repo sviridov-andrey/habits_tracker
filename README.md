@@ -1,4 +1,4 @@
-# Учебный проект Курсовая 7 DRF Django (Трекер полезных привычек)
+# Учебный проект Курсовая 7 DRF Django (Трекер полезных привычек) + Docker
 
 ## Для работы с проектом необходимо выполнить следующие действия:
 
@@ -8,10 +8,10 @@
 - Создать файл .env, заполнить его данными из файла env.sample
 - Создать базу данных в PostreSQL CREATE DATABASE qw7;
 - Создать python manage.py makemigrate и применить миграции python manage.py migrate
-- Установить и запустить Redis локально (на Windows)
-- В терминале набрать команду celery -A config worker -l info --pool=solo
-- В терминале набрать команду celery -A config beat -l info -S django
-- Запустить проект python manage.py runserver
+- Создать пользователя командой python manage.py csu
+- Установить и запустить Docker Desktop локально (на Windows)
+- Собрать образ командой docker-compose build
+- Запустить контейнеры командой docker-compose up
 - Откройте браузер и перейдите по адресу http://127.0.0.1:8000 для доступа к приложению.
 
 ## Решены следующие задачи:
