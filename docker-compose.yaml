@@ -1,0 +1,56 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    container_name: db_app
+    env_file:
+      - .env
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: app_container
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+  celery:
+    build: .
+    tty: true
+    command: celery -A config worker -l INFO
+    depends_on:
+      - redis
+      - app
+
+  celery-beat:
+    build: .
+    tty: true
+    command: celery -A config beat -S django
+    depends_on:
+      - celery
+      - redis
+      - app
