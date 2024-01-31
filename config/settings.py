@@ -24,7 +24,7 @@ load_dotenv(dotenv_path=dot_env)
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ysg)2qjt0ip(q72=p2oi=ize1z=^v6_4(lz4heyjc50-rvyu6z'  # os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -90,9 +90,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'qw7',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('DATABASES_PASSWORD'),
+        'NAME': os.getenv("POSTGRES_DB"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': os.getenv("POSTGRES_HOST"),
+        'PORT': os.getenv("POSTGRES_PORT"),
     }
 }
 
@@ -162,19 +164,10 @@ REST_FRAMEWORK = {
 }
 
 
-# URL-адрес брокера сообщений
 CELERY_BROKER_URL = 'redis://localhost:6379'
-
-# URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-
-# Часовой пояс для работы Celery
 CELERY_TIMEZONE = "Europe/Moscow"
-
-# Флаг отслеживания выполнения задач
 CELERY_TASK_TRACK_STARTED = True
-
-# Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 TELEGRAM_BOT_API_KEY = os.getenv('TELEGRAM_BOT_API_KEY')
